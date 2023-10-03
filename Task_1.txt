@@ -1,0 +1,88 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h> // for atoi and atof
+struct Data {
+  char customer_id[20];
+  float latitude;
+  float longitude;
+  char direction;
+  float accelerometer_x;
+  float accelerometer_y;
+  int day;
+  int month;
+  int year;
+  int hour;
+  int minute;
+  int second;
+  char am_pm[3];
+  char Time[10];
+  char A_or_H;
+};
+
+// int fun_parse_data(const char *s,struct Data *data) {
+//     char a[50][50]; 
+//     int i=0;
+//     char *token = strtok((char *)s, "#,");  //"#,:"
+//     while (token != NULL) {
+//         strcpy(a[i], token);
+//         token = strtok(NULL, ",");
+//         i++;
+//     }
+//     strcpy(data->customer_id , a[0]);
+//     data->latitude = atof(a[1]);
+//     data->longitude = atof(a[2]);
+//     data->direction = a[3][1];
+//     data->accelerometer_x = atof(a[4]);
+//     data->accelerometer_y = atof(a[5]);
+//     data->day = atoi(a[6]);
+//     data->month = atoi(a[7]);
+//     data->year = atoi(a[8]);
+//     // data->hour = atoi(a[9]);
+//     // data->minute = atoi(a[10]);
+//     // data->second = atoi(a[11]);
+//      strcpy(data->Time , a[9]);
+//     strcpy(data->am_pm , a[10]);   //a[12]
+//     data->A_or_H = a[11][0];        //a[13]
+// }
+int fun_parse_data(char *csvData, struct Data *data) {
+    sscanf(csvData, "#%9[^,],%f,%f, %c,%f,%f,%d,%d,%d,%9[^,],%3[^,],%c", 
+              data->customer_id, 
+              &data->latitude,
+              &data->longitude,
+              &data->direction,
+              &data->accelerometer_x,
+              &data->accelerometer_y,
+              &data->day, 
+              &data->month,
+              &data->year,
+              data->Time,
+              data->am_pm,
+              &data->A_or_H) ; //%d:%d:%d, %2[^,] &data->hour,&data->minute,&data->second, data->am_pm
+}
+
+int main() {
+    char Csv[] = "#123456UNI,123.456, 342.785, E, 12.5, 34.6, 01,01,983,01:23:34,AM,H#";
+    int length = strlen(Csv);
+    struct Data data;
+   
+    int i = 0;
+    fun_parse_data(Csv,&data);
+    
+    printf("Customer ID         : %s\n", data.customer_id);
+    printf("Latitude            : %.3f\n", data.latitude);
+    printf("Longitude           : %.3f\n", data.longitude);
+    printf("Direction           : %c\n", data.direction);
+    printf("Accelerometer X     : %.1f\n", data.accelerometer_x);
+    printf("Accelerometer Y     : %.1f\n", data.accelerometer_y);
+    printf("Day                 : %02d\n", data.day);
+    printf("Month               : %02d\n", data.month);
+    printf("Year                : %04d\n", data.year);
+    // printf("Hour                : %02d\n", data.hour);
+    // printf("Minute              : %02d\n", data.minute);
+    // printf("Second              : %02d\n", data.second);
+    printf("Time                : %s\n", data.Time);
+    printf("AM/PM               : %s\n", data.am_pm);
+    printf("A or H              : %c\n", data.A_or_H);
+
+    return 0;
+}
